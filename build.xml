@@ -1,0 +1,125 @@
+<project name="cloudapi-js" basedir="." default="release" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+    <property name="PID"     value="${ant.project.name}"/>
+    <property name="PID-DISTRO"     value="${PID}-distro"/>
+    <property name="DEBUG"     value="true"/>
+	<property name="revision" value="1.0.0" />
+
+	<include file="${basedir}/../common.xml"/>
+
+    <target name="compile-js" depends="">
+        <exec executable="coffee">
+            <arg value="-b"/>
+            <arg value="-o"/>
+            <arg value="${build.dir}/classes"/>
+            <arg value="-c"/>
+            <arg value="${src.dir}"/>
+        </exec>
+        <antcall target="concat-4-browser"/>
+
+        <exec executable="coffee">
+            <arg value="-b"/>
+            <arg value="-o"/>
+            <arg value="${build.dir}/classes"/>
+            <arg value="-c"/>
+            <arg value="${src.dir}"/>
+        </exec>
+        <antcall target="concat-4-nodejs"/>
+    </target>
+
+    <target name="concat-4-browser" depends="">
+        <replace file="${build.dir}/classes/ute.js">
+            <replacetoken><![CDATA[|PLATFORM_SPECIFIC_CODE|]]></replacetoken>
+            <replacevalue><![CDATA[
+                /* none */
+                ]]></replacevalue>
+        </replace>
+        <concat dest="${build.dir}/cloudapi-browser.js" append="true">
+            <fileset file="${build.dir}/classes/ute.js"/>
+            <fileset file="${build.dir}/classes/browser.js"/>
+            <fileset file="${build.dir}/classes/net.js"/>
+            <fileset file="${build.dir}/classes/base.js"/>
+            <fileset file="${build.dir}/classes/browser-dom.js"/>
+            <fileset file="${build.dir}/classes/context.js"/>
+            <fileset file="${build.dir}/classes/provider.js"/>
+        </concat>
+        <concat dest="${build.dir}/cloudapi-browser.js" append="true">
+            <fileset dir="${build.dir}/classes">
+                <exclude name="browser-dom.js"/>
+                <exclude name="ute.js"/>
+                <exclude name="browser.js"/>
+                <exclude name="nodejs-dom.js"/>
+                <exclude name="nodejs.js"/>
+                <exclude name="net.js"/>
+                <exclude name="context.js"/>
+                <exclude name="provider.js"/>
+                <exclude name="base.js"/>
+            </fileset>
+        </concat>
+        <replace token="|GLOBAL|" value="window" file="${build.dir}/cloudapi-browser.js"/>
+    </target>
+
+    <target name="concat-4-nodejs" depends="">
+        <replace file="${build.dir}/classes/ute.js">
+            <replacetoken><![CDATA[|PLATFORM_SPECIFIC_CODE|]]></replacetoken>
+            <replacevalue><![CDATA[
+
+                var __os__ = require('os');
+
+                ]]></replacevalue>
+        </replace>
+        <concat dest="${build.dir}/cloudapi-js.js" append="true">
+            <fileset file="${build.dir}/classes/ute.js"/>
+            <fileset file="${build.dir}/classes/nodejs.js"/>
+            <fileset file="${build.dir}/classes/net.js"/>
+            <fileset file="${build.dir}/classes/base.js"/>
+            <fileset file="${build.dir}/classes/nodejs-dom.js"/>
+            <fileset file="${build.dir}/classes/context.js"/>
+            <fileset file="${build.dir}/classes/provider.js"/>
+        </concat>
+        <concat dest="${build.dir}/cloudapi-js.js" append="true">
+            <fileset dir="${build.dir}/classes">
+                <exclude name="nodejs-dom.js"/>
+                <exclude name="ute.js"/>
+                <exclude name="browser-dom.js"/>
+                <exclude name="browser.js"/>
+                <exclude name="nodejs.js"/>
+                <exclude name="net.js"/>
+                <exclude name="context.js"/>
+                <exclude name="provider.js"/>
+                <exclude name="base.js"/>
+            </fileset>
+        </concat>
+        <replace token="|GLOBAL|" value="exports" file="${build.dir}/cloudapi-js.js"/>
+    </target>
+
+
+    <target name="pack-source" depends="">
+        <copy todir="${pack.dir}/src">
+            <fileset dir="${src.dir}"/>
+		</copy>
+        <copy todir="${pack.dir}/lib">
+			<fileset dir="${build.dir}">
+                <include name="*.js"/>
+			</fileset>
+		</copy>
+    </target>
+
+    <target name="pre-test" depends="">
+        <replace token="|GLOBAL|" value="exports" dir="${build.test.dir}"/>
+    </target>
+
+    <target name="pack-tpcl-modules">
+        <mkdir dir="${pack.dir}/node_modules/dom-js"/>
+        <copy todir="${pack.dir}/node_modules/dom-js">
+            <fileset dir="${ivy.localrepo.dir}/node_modules/dom-js" />
+		</copy>
+    </target>
+
+    <target name="pack-samples" depends="">
+    </target>
+
+
+	<target name="release" depends="common.pub-distro"/>
+
+</project>

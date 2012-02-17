@@ -1,0 +1,21 @@
+{
+  "description": "A set of classes for accessing clouds, loosely based on dasein.cloud.",
+  "name": "cloudapi-js",
+  "version": "1.0.0",
+  "author": "Ken Leung <mailtokenl@gmail.com>",
+  "repository": {
+    "url": ""
+  },
+  "main": "./lib/cloudapi-js",
+  "engines": {
+    "node": "~0.6.6"
+  },
+  "directories": {
+    "lib": "./lib"
+  },
+  "dependencies": {
+    "dom-js": ">=0.0.6"
+  },
+  "contributors": ["Ken Leung"],
+  "devDependencies": {}
+}

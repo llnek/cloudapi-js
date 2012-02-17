@@ -1,0 +1,21 @@
+<ivy-module version="2.0">
+    <info organisation="com.zotoh" module="cloudapi-js"/>
+    <configurations defaultconf="libjar">
+    	<conf name="libjar" description="the core jar library"/>
+        <conf name="thirdparty"  description="3rd party libs"/>
+    	<conf name="test" extends="libjar,thirdparty" visibility="private" description="internal testing"/>
+    </configurations>
+    <publications defaultconf="libjar">
+    	<artifact name="cloudapi-js-distro" type="distro"  conf="libjar" ext="zip"/>
+    </publications>
+    <dependencies defaultconf="libjar">
+        <dependency org="com.jquery" name="jquery" rev="1.7.1.min" conf="thirdparty->default">
+            <artifact name="jquery" type="js"/>
+        </dependency>
+        <dependency org="com.googlecode" name="crypto-js" rev="2.5.2.min" conf="thirdparty->default">
+            <artifact name="crypto" type="js"/>
+            <artifact name="crypto-sha256-hmac" type="js"/>
+        </dependency>
+    </dependencies>
+
+</ivy-module>

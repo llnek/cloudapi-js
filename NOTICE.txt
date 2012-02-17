@@ -1,0 +1,14 @@
+------------------------------------------------------------------------------
+General Purpose Cloud API (cloudapi-js).
+Copyright 2012 Cherimoia,LLC. All Rights Reserved.
+------------------------------------------------------------------------------
+The following set of software modules/components are included
+( bundled as binaries/source code):
+
+- JQuery.
+  @see http://jquery.com
+  @see-license http://jquery.org/license/
+
+- crypto-js
+  @see http://code.google.com/p/crypto-js/
+  @see-license http://www.opensource.org/licenses/bsd-license.php
